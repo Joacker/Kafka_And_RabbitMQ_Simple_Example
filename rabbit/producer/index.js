@@ -17,7 +17,7 @@ async function connect() {
     const msg = 'Mensaje de Prueba para ver si funciona!'; // Mensaje a enviar
     try {
         const connection = await amqp.connect(rabbitMQ_settings);
-        console.log('Connected to RabbitMQ');
+        console.log('Connected to RabbitMQ from producer');
         // Ahora vamos a crear un canal
         const channel = await connection.createChannel();
         console.log('Channel created');
@@ -27,7 +27,7 @@ async function connect() {
         
         await channel.sendToQueue(queue, Buffer.from(msg)); // Envia el mensaje
         console.log("Device [x] sending: %s", msg);
-        
+
     } catch (error) {
         console.log(error);
     }
