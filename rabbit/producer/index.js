@@ -17,6 +17,14 @@ async function connect() {
     try {
         const connection = await amqp.connect(rabbitMQ_settings);
         console.log('Connected to RabbitMQ');
+        // Ahora vamos a crear un canal
+        const channel = await connection.createChannel();
+        console.log('Channel created');
+        // Ahora vamos a crear una cola
+        const queue = 'hello';
+        await channel.assertQueue(queue, { durable: false });
+
+        
     } catch (error) {
         console.log(error);
     }
