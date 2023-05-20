@@ -1,0 +1,22 @@
+version: "3.5"
+
+services:
+
+  rabbitmq:
+    image: bitnami/rabbitmq:3.9.29-debian-11-r20
+    container_name: rabbitDockerCompose
+    hostname: rmq
+
+    ports:
+      - 5672:5672 # AMQP
+      - 8080:15672 # HTTP
+
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_LOOPBACK_USERS=none  # Permite el acceso remoto a RabbitMQ
+  
+  producer:
+    build: ./producer
+    container_name: producer
+    
