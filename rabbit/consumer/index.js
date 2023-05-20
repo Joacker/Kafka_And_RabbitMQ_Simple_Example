@@ -1,6 +1,6 @@
-const amqp = require('amqplib/callback_api'); // Importar libreria
+const amqp = require('amqplib'); // Importar libreria
 
-amqp.connect('amqp://0.0.0.0', function(error0, connection) {
+amqp.connect('amqp://rabbitmq:5672', function(error0, connection) {
     if (error0) { throw error0; }
 
     connection.createChannel(function(error1, channel) { // Crea un canal

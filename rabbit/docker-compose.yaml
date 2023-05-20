@@ -1,22 +1,42 @@
 version: "3.5"
 
 services:
-
   rabbitmq:
-    image: bitnami/rabbitmq:3.9.29-debian-11-r20
-    container_name: rabbitDockerCompose
-    hostname: rmq
+      image: rabbitmq:3.8-management-alpine
+      container_name: 'rabbitmq'
+      ports:
+          - 5673:5672
+          - 15673:15672
+      volumes:
+          - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+          - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      networks:
+          - rabbitmq_nodejs
 
-    ports:
-      - 5672:5672 # AMQP
-      - 8080:15672 # HTTP
 
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-      - RABBITMQ_LOOPBACK_USERS=none  # Permite el acceso remoto a RabbitMQ
-  
   producer:
     build: ./producer
+    restart: always
     container_name: producer
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_nodejs
+
+  consumer:
+    build: ./consumer
+    restart: always
+    container_name: consumer
+    depends_on:
+      - rabbitmq
+      - producer
+    networks:
+      - rabbitmq_nodejs
+networks:
+  rabbitmq_nodejs:
+    driver: bridge
+  
+
+  
+
     

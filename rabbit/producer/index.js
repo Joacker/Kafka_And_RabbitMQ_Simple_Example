@@ -1,21 +1,43 @@
-const amqp = require('amqplib/callback_api'); // Importa libreria
+const amqp = require('amqplib'); // Importa libreria
 
-amqp.connect('amqp://0.0.0.0', function(error0, connection) { // Realiza la conexion
-    if (error0) { throw error0; }
+//maek a connection rabbit mq server from dockerfile
 
-    connection.createChannel(function(error1, channel) { // Crea un canal
-        if (error1) { throw error1; }
+const rabbitMQ_settings = {
+    protocol: 'amqp',
+    hostname: 'rabbitmq',
+    port: 5672,
+    username: 'guest',
+    password: 'guest',
+    authMechanism: ['PLAIN', 'AMQPLAIN', 'EXTERNAL']
+}
 
-        let queue = 'hello'; // Cola a la que se envia el mensaje
-        let msg = 'Mensaje de Prueba para ver si funciona!'; // Mensaje a enviar
+connect();
 
-        channel.assertQueue(queue, { // "Asegura" que exista la cola.
-            durable: false
-        });
-        channel.sendToQueue(queue, Buffer.from(msg)); // Envia el mensaje
+async function connect() {
+    try {
+        const connection = await amqp.connect(rabbitMQ_settings);
+        console.log('Connected to RabbitMQ');
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-        console.log("Device [x] sending: %s", msg);
-    });
+// amqp.connect('amqp://rabbitmq:5672', function(error0, connection) { // Realiza la conexion
+//     if (error0) { throw error0; }
 
-    setTimeout(function() { connection.close(); process.exit(0); }, 500);
-});
+//     connection.createChannel(function(error1, channel) { // Crea un canal
+//         if (error1) { throw error1; }
+
+//         let queue = 'hello'; // Cola a la que se envia el mensaje
+//         let msg = 'Mensaje de Prueba para ver si funciona!'; // Mensaje a enviar
+
+//         channel.assertQueue(queue, { // "Asegura" que exista la cola.
+//             durable: false
+//         });
+//         channel.sendToQueue(queue, Buffer.from(msg)); // Envia el mensaje
+
+//         console.log("Device [x] sending: %s", msg);
+//     });
+
+//     setTimeout(function() { connection.close(); process.exit(0); }, 500);
+// });
