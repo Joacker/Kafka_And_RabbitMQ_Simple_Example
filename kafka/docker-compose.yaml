@@ -58,22 +58,4 @@ services:
     volumes:
       - ./consumer:/usr/src/app
 
-  redis1_temperatura:
-    container_name: redis1
-    image: redis:6.2.6
-    restart: always
-    ports:
-      - "6379:6379"
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-  
-  redis1_humedad:
-    container_name: redis1
-    image: redis:6.2.6
-    restart: always
-    ports:
-      - "6379:6379"
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-
     
